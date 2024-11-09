@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const db = require("./database"); //create database from database.js
 
 function createWindow() {
     // Create the browser window.
@@ -14,9 +15,6 @@ function createWindow() {
 
     // Load the index.html file
     mainWindow.loadFile('index.html');
-
-    // Open the DevTools in development mode
-    mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);
