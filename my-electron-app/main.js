@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const db = require("./database"); //create database from database.js
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -26,16 +27,6 @@ function createWindow() {
     });
 
     mainWindow.loadFile('index.html');
-
-    // Open DevTools in development mode
-    if (process.env.NODE_ENV === 'development') {
-        mainWindow.webContents.openDevTools();
-    }
-}
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling
-if (require('electron-squirrel-startup')) {
-    app.quit();
 }
 
 app.whenReady().then(() => {
