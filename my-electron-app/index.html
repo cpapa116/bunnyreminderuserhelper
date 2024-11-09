@@ -1,19 +1,12 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Electron App</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            padding: 20px;
-        }
-    </style>
+    <title>Electron + React App</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';" />
 </head>
 <body>
-    <h1>Hello Electron!</h1>
-    <p>Welcome to your Electron application.</p>
+    <div id="root"></div>
+    <script src="./dist/bundle.js"></script>
 </body>
 </html>
