@@ -1,23 +1,33 @@
 const { app, BrowserWindow, Notification, ipcMain } = require('electron');
 const player = require('play-sound')();
 const path = require('path');
+const db = require("./database"); //create database from database.js
 
 function createWindow() {
-    // Create the browser window.
     const mainWindow = new BrowserWindow({
         width: 1200,
         height: 800,
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
+            nodeIntegration: false,
+            contextIsolation: true,
+            sandbox: false,
+            preload: path.join(__dirname, 'preload.js')
         }
     });
 
-    // Load the index.html file
-    mainWindow.loadFile('index.html');
+    // Set CSP headers
+    mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+        callback({
+            responseHeaders: {
+                ...details.responseHeaders,
+                'Content-Security-Policy': [
+                    "default-src 'self'; connect-src 'self' https://generativelanguage.googleapis.com; script-src 'self' 'unsafe-eval'"
+                ]
+            }
+        });
+    });
 
-    // Open the DevTools in development mode
-    mainWindow.webContents.openDevTools();
+    mainWindow.loadFile('index.html');
 }
 
 // Listen for the 'show-notification' event from the renderer
@@ -43,16 +53,16 @@ ipcMain.on('show-notification', (event, title, body) => {
 
 app.whenReady().then(() => {
     createWindow();
+
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
+        }
+    });
 });
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
-    }
-});
-
-app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
     }
 });
