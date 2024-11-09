@@ -1,4 +1,5 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, Notification, ipcMain } = require('electron');
+const player = require('play-sound')();
 const path = require('path');
 const db = require("./database"); //create database from database.js
 
@@ -28,6 +29,27 @@ function createWindow() {
 
     mainWindow.loadFile('index.html');
 }
+
+// Listen for the 'show-notification' event from the renderer
+ipcMain.on('show-notification', (event, title, body) => {
+    const notification = new Notification({
+        title: title,
+        body: body
+    });
+
+    const audioPath = path.resolve(__dirname, 'src', 'sounds', 'surprise.mp3');
+
+    // Play sound when notification is displayed
+    player.play(audioPath, function(err) {
+        if (err) {
+          console.error('Error playing audio:', err);
+        } else {
+          console.log('Audio played successfully');
+        }
+    });
+    
+    notification.show();
+});
 
 app.whenReady().then(() => {
     createWindow();
