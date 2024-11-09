@@ -1,11 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { getGeminiResponse } from './services/gemini';
+import { getGeminiResponse, getRoleDescription } from './services/gemini';
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    const initialMessage = {
+      text: "Surprise motherfucker! I'm Sergeant Doakes, and you better have a good reason for being here.",
+      sender: 'bot'
+    };
+    setMessages([initialMessage]);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -19,23 +27,21 @@ const ChatInterface = () => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // Add user message to chat
     const userMessage = { text: input, sender: 'user' };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
     try {
-      // Make the actual API call to Gemini
       const response = await getGeminiResponse(input);
       const botMessage = { 
         text: response,
-        sender: 'bot' 
+        sender: 'bot'
       };
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       const errorMessage = { 
-        text: "Sorry, I encountered an error. Please try again.",
+        text: "Something's not right here, motherfucker. Say that again and this time make it make sense!",
         sender: 'bot'
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -46,8 +52,21 @@ const ChatInterface = () => {
 
   return (
     <div className="flex flex-col h-screen max-w-4xl mx-auto p-4">
+      {/* Character info card */}
+      <div className="bg-slate-800 rounded-lg p-4 mb-4 shadow-sm border border-slate-700">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-white">
+            👮
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white">Sgt. Doakes</h2>
+            <p className="text-sm text-slate-300">{getRoleDescription()}</p>
+          </div>
+        </div>
+      </div>
+
       {/* Chat messages */}
-      <div className="flex-1 overflow-y-auto mb-4 border rounded-lg p-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto mb-4 border rounded-lg p-4 bg-slate-50">
         {messages.map((message, index) => (
           <div
             key={index}
@@ -59,7 +78,7 @@ const ChatInterface = () => {
               className={`inline-block p-3 rounded-lg max-w-[80%] ${
                 message.sender === 'user'
                   ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-800'
+                  : 'bg-slate-700 text-white'
               }`}
             >
               {message.text}
@@ -67,7 +86,7 @@ const ChatInterface = () => {
           </div>
         ))}
         {isLoading && (
-          <div className="text-gray-500 italic">Gemini is thinking...</div>
+          <div className="text-slate-600 italic">Doakes is watching...</div>
         )}
         <div ref={messagesEndRef} />
       </div>
@@ -79,13 +98,13 @@ const ChatInterface = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           className="flex-1 p-2 border rounded"
-          placeholder="Type your message..."
+          placeholder="Report to Sergeant Doakes..."
           disabled={isLoading}
         />
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-blue-300"
+          className="px-4 py-2 bg-slate-700 text-white rounded hover:bg-slate-600 disabled:bg-slate-400"
         >
           Send
         </button>
@@ -96,10 +115,10 @@ const ChatInterface = () => {
 
 const App = () => {
     return (
-        <div className="min-h-screen bg-gray-100">
-            <header className="bg-white shadow-sm">
+        <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+            <header className="bg-slate-800 shadow-sm">
                 <div className="max-w-4xl mx-auto py-4 px-4">
-                    <h1 className="text-2xl font-bold text-gray-800">Gemini Chat</h1>
+                    <h1 className="text-2xl font-bold text-white">Miami Metro PD</h1>
                 </div>
             </header>
             <main className="max-w-4xl mx-auto mt-4">
