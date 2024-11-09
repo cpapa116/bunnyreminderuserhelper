@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { getGeminiResponse } from './services/gemini';
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState([]);
@@ -26,20 +25,18 @@ const ChatInterface = () => {
     setIsLoading(true);
 
     try {
-      // Make the actual API call to Gemini
-      const response = await getGeminiResponse(input);
-      const botMessage = { 
-        text: response,
-        sender: 'bot' 
-      };
-      setMessages(prev => [...prev, botMessage]);
+      // Here you'll make the API call to Gemini
+      // For now, we'll simulate a response
+      setTimeout(() => {
+        const botMessage = { 
+          text: "This is a placeholder response. You'll need to implement the Gemini API call here.", 
+          sender: 'bot' 
+        };
+        setMessages(prev => [...prev, botMessage]);
+        setIsLoading(false);
+      }, 1000);
     } catch (error) {
-      const errorMessage = { 
-        text: "Sorry, I encountered an error. Please try again.",
-        sender: 'bot'
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
+      console.error('Error:', error);
       setIsLoading(false);
     }
   };
@@ -56,7 +53,7 @@ const ChatInterface = () => {
             }`}
           >
             <div
-              className={`inline-block p-3 rounded-lg max-w-[80%] ${
+              className={`inline-block p-3 rounded-lg ${
                 message.sender === 'user'
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-200 text-gray-800'
