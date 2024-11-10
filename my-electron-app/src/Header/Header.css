@@ -9,7 +9,9 @@
   font-family: 'ADLaMDisplay', sans-serif;
   font-size: 40px;
   color: #8A8A8A;
-  margin-left: 5%;
+  padding: 10px;
+  border: 2px solid white;
+  border-radius: 0;
 }
 
 .chat-button {
