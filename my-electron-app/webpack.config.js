@@ -1,14 +1,6 @@
 const path = require('path');
-const webpack = require('webpack');
-const dotenv = require('dotenv');
-
 
 module.exports = {
-    plugins: [
-        new webpack.DefinePlugin({
-          'process.env': JSON.stringify(dotenv.config().parsed)
-        })
-      ],
     mode: 'development',
     entry: './src/index.js',
     devtool: 'source-map',
@@ -31,10 +23,24 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.(png|jpe?g|gif|svg)$/i,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[path][name].[ext]'
+                        }
+                    }
+                ]
             }
         ]
     },
     resolve: {
-        extensions: ['.js', '.jsx']
+        extensions: ['.js', '.jsx'],
+        fallback: {
+            fs: false,
+          }
     }
 };
