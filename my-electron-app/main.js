@@ -2,10 +2,12 @@ const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const { ipcMain } = require('electron');
 
+const db = require("./database");
+
 function createWindow() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 1200,
+        width: 600,
         height: 800,
         webPreferences: {
             nodeIntegration: true,

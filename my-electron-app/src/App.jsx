@@ -8,8 +8,8 @@ const App = () => {
     return (
         <div className="App">
             <Header />
-            {/* <CurrentReminders />
-            <AddReminder /> */}
+            <CurrentReminders />
+            <AddReminder />
         </div>
     );
 };
