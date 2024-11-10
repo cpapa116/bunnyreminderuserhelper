@@ -2,12 +2,22 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const sqlite3 = require('sqlite3').verbose();
+
+
+const db = new sqlite3.Database(path.join(__dirname, 'database.db')); //create database from database.js
+
+db.serialize(() => {//create table for Reminders
+    db.run("CREATE TABLE IF NOT EXISTS Reminders (id INTEGER PRIMARY KEY, reminderName TEXT, dueDate INTEGER)", (err) => {
+        if (err) {
+            console.error("Error creating table:", err.message);
+        }
+    });
+});
 
 // Initialize Gemini API
-const genAI = new GoogleGenerativeAI("AIzaSyBCth1GxRvwRFSz-Ck1ZaiWSbmfZKqyFUw");
+const genAI = new GoogleGenerativeAI("noapikeyforyou");
 const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-
-const db = require("./database");
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -51,7 +61,28 @@ ipcMain.handle('gemini-generate', async (event, prompt) => {
     }
 });
 
-ipcMain.on('my-channel', (event, data) => {
-    console.log('Received from renderer:', data);
-    event.reply('my-channel-response', 'Hello from the main process');
+ipcMain.handle('add-reminder', (event, reminderName, dueDate) => {
+    return new Promise((resolve,reject) => {
+        const inSql = 'INSERT INTO Reminders (reminderName, dueDate) VALUES (?,?)';
+        db.run(inSql,[reminderName,dueDate],function(err){
+            if(err){
+                reject(err)
+            } else {
+                resolve({ id: this.lastID, reminderName, dueDate });
+            }
+        });
+    });
+});
+
+ipcMain.handle('remove-reminder', (event, reminderName, dueDate) => {
+    return newPromise((resolve,reject) => {
+        const outSql = 'DELETE FROM Reminders (reminderName, dueDate) VALUES (?,?)';
+        db.run(outSql,[reminderName,dueDate],function(err){
+            if(err){
+                reject(err);
+            } else {
+                resolve({ id: this.lastID, reminderName, dueDate});
+            }
+        });
+    });
 });
