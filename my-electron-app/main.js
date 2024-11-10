@@ -1,15 +1,19 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { ipcMain } = require('electron');
+require('dotenv').config();
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+
+// Initialize Gemini API
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+
+const db = require("./database");
 
 function createWindow() {
-    // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 1200,
+        width: 600,
         height: 800,
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
             nodeIntegration: false,
             contextIsolation: true,
             enableRemoteModule: false,
@@ -18,7 +22,6 @@ function createWindow() {
         }
     });
 
-    // Load the index.html file
     mainWindow.loadFile('index.html');
 }
 
@@ -36,8 +39,19 @@ app.on('activate', () => {
     }
 });
 
+// Handle Gemini API requests
+ipcMain.handle('gemini-generate', async (event, prompt) => {
+    try {
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        return response.text();
+    } catch (error) {
+        console.error('Error in main process:', error);
+        throw error;
+    }
+});
+
 ipcMain.on('my-channel', (event, data) => {
     console.log('Received from renderer:', data);
-    // Send a response back to the renderer
     event.reply('my-channel-response', 'Hello from the main process');
 });

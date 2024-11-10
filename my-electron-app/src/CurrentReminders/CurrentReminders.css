@@ -1,0 +1,62 @@
+.current-reminder-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .current-reminder-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .current-reminders-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin-left: 5%;
+    font-family: 'FiraSans', sans-serif;
+  }
+  
+  .header-buttons {
+    display: flex;
+    gap: 10px;
+    margin-right: 5%;
+  }
+  
+  .filter {
+    background-color: #8AD1E1;
+    color: #302F2F;
+    border: none;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+  }
+
+  .mute {
+    background-color: #8AD1E1;
+    color: #302F2F;
+    border: none;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-family: 'FiraSans', sans-serif;
+    width: 100%;
+  }
+  
+  .filter:hover,
+  .mute:hover {
+    background-color: #bbb;
+  }
+
+  .filter img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .reminders-list-container {
+    margin-top: 20px;
+  }
+  
