@@ -1,13 +1,13 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Notification } = require('electron');
 const path = require('path');
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const db = require("./database"); //create database from database.js
+const player = require('play-sound')(); //used to play surprise for notifications
 
 // Initialize Gemini API
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-
-const db = require("./database");
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -54,4 +54,23 @@ ipcMain.handle('gemini-generate', async (event, prompt) => {
 ipcMain.on('my-channel', (event, data) => {
     console.log('Received from renderer:', data);
     event.reply('my-channel-response', 'Hello from the main process');
+});
+
+ipcMain.on('show-notification', (event, title, body) => { //renders notification
+    const notification = new Notification({
+        title: title,
+        body: body,
+        silent: true //needed so macos does not play an additional system sound
+    });
+    const audioPath = path.resolve(__dirname, 'src', 'sounds', 'surprise.mp3');
+    // Play sound when notification is displayed
+    player.play(audioPath, function(err) {
+        if (err) {
+          console.error('Error playing audio:', err);
+        } else {
+          console.log('Audio played successfully');
+        }
+    });
+    
+    notification.show();
 });
