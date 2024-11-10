@@ -1,18 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,12 +16,11 @@ const ChatInterface = () => {
     setIsLoading(true);
 
     try {
-      // Here you'll make the API call to Gemini
-      // For now, we'll simulate a response
+      // Simulate a bot response (replace with actual API logic later)
       setTimeout(() => {
-        const botMessage = { 
-          text: "This is a placeholder response. You'll need to implement the Gemini API call here.", 
-          sender: 'bot' 
+        const botMessage = {
+          text: "This is a placeholder response. You'll need to implement the Gemini API call here.",
+          sender: 'bot',
         };
         setMessages(prev => [...prev, botMessage]);
         setIsLoading(false);
@@ -48,9 +38,7 @@ const ChatInterface = () => {
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`mb-4 ${
-              message.sender === 'user' ? 'text-right' : 'text-left'
-            }`}
+            className={`mb-4 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}
           >
             <div
               className={`inline-block p-3 rounded-lg ${
@@ -63,10 +51,7 @@ const ChatInterface = () => {
             </div>
           </div>
         ))}
-        {isLoading && (
-          <div className="text-gray-500 italic">Gemini is thinking...</div>
-        )}
-        <div ref={messagesEndRef} />
+        {isLoading && <div className="text-gray-500 italic">Gemini is thinking...</div>}
       </div>
 
       {/* Input form */}
@@ -91,19 +76,4 @@ const ChatInterface = () => {
   );
 };
 
-const App = () => {
-    return (
-        <div className="min-h-screen bg-gray-100">
-            <header className="bg-white shadow-sm">
-                <div className="max-w-4xl mx-auto py-4 px-4">
-                    <h1 className="text-2xl font-bold text-gray-800">Gemini Chat</h1>
-                </div>
-            </header>
-            <main className="max-w-4xl mx-auto mt-4">
-                <ChatInterface />
-            </main>
-        </div>
-    );
-};
-
-export default App;
+export default ChatInterface;
