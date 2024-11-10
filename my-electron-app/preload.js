@@ -14,6 +14,9 @@ contextBridge.exposeInMainWorld(
                 }
             }
         },
+        sendNotification: () => {
+            ipcRenderer.send('show-notification', 'Notification Title', 'Notification Body');
+        }, //expose sendNotification to be used everywhere
         send: (channel, data) => {
             let validChannels = ['my-channel'];
             if (validChannels.includes(channel)) {

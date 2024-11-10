@@ -1,8 +1,10 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Notification } = require('electron');
 const path = require('path');
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const sqlite3 = require('sqlite3').verbose();
+const db = require("./database"); //create database from database.js
+const player = require('play-sound')(); //used to play surprise for notifications
 
 
 const db = new sqlite3.Database(path.join(__dirname, 'database.db')); //create database from database.js
@@ -85,4 +87,22 @@ ipcMain.handle('remove-reminder', (event, reminderName, dueDate) => {
             }
         });
     });
+
+ipcMain.on('show-notification', (event, title, body) => { //renders notification
+    const notification = new Notification({
+        title: title,
+        body: body,
+        silent: true //needed so macos does not play an additional system sound
+    });
+    const audioPath = path.resolve(__dirname, 'src', 'sounds', 'surprise.mp3');
+    // Play sound when notification is displayed
+    player.play(audioPath, function(err) {
+        if (err) {
+          console.error('Error playing audio:', err);
+        } else {
+          console.log('Audio played successfully');
+        }
+    });
+    
+    notification.show();
 });
