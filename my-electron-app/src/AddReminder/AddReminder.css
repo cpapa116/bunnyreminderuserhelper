@@ -1,0 +1,13 @@
+.add-reminder-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+.add-reminder-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin-left: 5%;
+    font-family: 'FiraSans', sans-serif;
+}
