@@ -14,7 +14,6 @@ const AddReminders = () => {
     const handleTimeChange = (e) => {
         setSelectedTime(e.target.value);
     };
-
     const handleReminderChange = (e) => {
       setReminderName(e.target.value);
     };
@@ -78,7 +77,7 @@ const AddReminders = () => {
             </div>
             <div className='column'>
               <p className='column-title'>Add</p>
-              <button className='add-button' onClick={handleAddReminder}>Add</button>
+              <button className='add-button'>Add</button>
             </div>
           </div>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
