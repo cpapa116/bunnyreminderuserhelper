@@ -29,7 +29,8 @@ function createWindow() {
             contextIsolation: true,
             enableRemoteModule: false,
             sandbox: false,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            icon: __dirname + "./src/Images/appIcons/icon.ico"
         }
     });
 
