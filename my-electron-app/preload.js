@@ -28,6 +28,11 @@ contextBridge.exposeInMainWorld(
             if (validChannels.includes(channel)) {
                 ipcRenderer.on(channel, (event, ...args) => func(...args));
             }
+        },
+        addReminder: (reminderName, dueDate) => {
+            ipcRenderer.invoke('add-reminder', reminderName, dueDate)
+        },
+        removeReminder: (reminderName, dueDate) => {
+            ipcRenderer.invoke('remove-reminder', reminderName, dueDate)
         }
-    }
-);
+});
