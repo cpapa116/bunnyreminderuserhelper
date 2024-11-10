@@ -1,13 +1,24 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Notification } = require('electron');
 const path = require('path');
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const sqlite3 = require('sqlite3').verbose();
+const player = require('play-sound')(); //used to play surprise for notifications
+
+
+const db = new sqlite3.Database(path.join(__dirname, 'database.db')); //create database from database.js
+
+db.serialize(() => {//create table for Reminders
+    db.run("CREATE TABLE IF NOT EXISTS Reminders (id INTEGER PRIMARY KEY, reminderName TEXT, dueDate INTEGER)", (err) => {
+        if (err) {
+            console.error("Error creating table:", err.message);
+        }
+    });
+});
 
 // Initialize Gemini API
-const genAI = new GoogleGenerativeAI(process.nextTick.GoogleGenerativeAI);
+const genAI = new GoogleGenerativeAI("noapikeyforyou");
 const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-
-const db = require("./database");
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -51,7 +62,63 @@ ipcMain.handle('gemini-generate', async (event, prompt) => {
     }
 });
 
-ipcMain.on('my-channel', (event, data) => {
-    console.log('Received from renderer:', data);
-    event.reply('my-channel-response', 'Hello from the main process');
+//handler to add reminders to the database
+ipcMain.handle('add-reminder', (event, reminderName, dueDate) => {
+    return new Promise((resolve,reject) => {
+        const inSql = 'INSERT INTO Reminders (reminderName, dueDate) VALUES (?,?)'; //sql that inserts new reminder into database
+        db.run(inSql,[reminderName,dueDate],function(err){ //execute sql
+            if(err){
+                reject(err)
+            } else {
+                resolve({ id: this.lastID, reminderName, dueDate });
+            }
+        });
+    });
+});
+
+//!handler to remove reminders from the database UNTESTED
+ipcMain.handle('remove-reminder', (event, reminderName, dueDate) => {
+    return new Promise((resolve,reject) => {
+        const outSql = 'DELETE FROM Reminders WHERE reminderName = ? AND dueDate = ?'; //sql that removes reminder from database
+        db.run(outSql,[reminderName,dueDate],function(err){ //execute sql
+            if(err){
+                reject(err);
+            } else {
+                resolve({ id: this.lastID, reminderName, dueDate});
+            }
+        });
+    });
+});
+
+//handler to get all reminders from the database
+ipcMain.handle('get-reminders', (event, reminderName, dueDate) => {
+    return new Promise((resolve,reject) => {
+        const getSql = 'SELECT * FROM Reminders'; //sql that gets all reminders from database
+        db.all(getSql, (err,rows) => { //execute sql
+            if(err){
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+});
+
+ipcMain.on('show-notification', (event, title, body) => { //renders notification
+    const notification = new Notification({
+        title: title,
+        body: body,
+        silent: true //needed so macos does not play an additional system sound
+    });
+    const audioPath = path.resolve(__dirname, 'src', 'sounds', 'surprise.mp3');
+    // Play sound when notification is displayed
+    player.play(audioPath, function(err) {
+        if (err) {
+          console.error('Error playing audio:', err);
+        } else {
+          console.log('Audio played successfully');
+        }
+    });
+    
+    notification.show();
 });

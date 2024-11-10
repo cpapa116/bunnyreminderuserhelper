@@ -1,6 +1,5 @@
 import './AddReminder.css';
 import React, { useState } from 'react';
-// import { addReminder, getReminders } from '../../database';
 
 const AddReminders = () => {
     const [reminderName, setReminderName] = useState('');
@@ -15,30 +14,30 @@ const AddReminders = () => {
     const handleTimeChange = (e) => {
         setSelectedTime(e.target.value);
     };
+    const handleReminderChange = (e) => {
+      setReminderName(e.target.value);
+    };
 
-    // const handleAddReminder = () => {
-    //   if (!reminderName || !selectedDate || !selectedTime) {
-    //       setErrorMessage('Please fill in all fields.');
-    //       return;
-    //   }
-
-    //   const fullDate = `${selectedDate}T${selectedTime}`;
-    //   const dueDate = new Date(fullDate).getTime();
-
-    //   // Call the addReminder function from database.js
-    //   addReminder(reminderName, dueDate, (err, result) => {
-    //       if (err) {
-    //           console.error('Error adding reminder:', err);
-    //           setErrorMessage('Failed to add reminder.');
-    //       } else {
-    //           console.log('Reminder added:', result);
-    //           setErrorMessage('');
-    //           setReminderName('');
-    //           setSelectedDate('');
-    //           setSelectedTime('');
-    //       }
-    //   });
-    // }
+    const handleAddReminder = async() => {
+      if (reminderName && selectedDate && selectedTime) { //if all fields are filled out
+        const fullDate = `${selectedDate}T${selectedTime}`;
+        const dueDate = new Date(fullDate).getTime();
+        try{
+          const result = await window.api.addReminder(reminderName, dueDate); //api call to database to add a reminder
+          setErrorMessage(''); //no errors to present
+          setReminderName(''); //erase reminder name field
+          setSelectedDate(''); //erase date field
+          setSelectedTime(''); //erase time field
+          console.log('Reminder Added: ', result);
+        } catch (err) { //failed to add reminder to database
+          console.error('Error adding reminder', err); //!log error for now
+          setErrorMessage('Failed to add reminder'); //set error to show failure to add reminder
+        }
+      } else { //all fields were not filled out
+        setErrorMessage('Please fill in all fields'); //notify user that all fields are not filled out
+        return;
+      }
+    }
 
     return (
         <div className='add-reminder-container'>
@@ -47,7 +46,13 @@ const AddReminders = () => {
           {/* Reminder Name Row */}
           <div className='reminder-name-row'>
             <p className='column-title'>Reminder Name</p>
-            <input type="text" className='input' placeholder='Enter reminder name' />
+            <input 
+              type="text" 
+              className='input'
+              value={reminderName}
+              onChange={handleReminderChange}
+              placeholder='Enter reminder name'
+            />
           </div>
 
           {/* Columns for Due Date, Time, and Add */}

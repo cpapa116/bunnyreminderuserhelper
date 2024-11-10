@@ -1,5 +1,5 @@
 import './CurrentReminders.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import filter from '../Images/filter.png'
 import mute from "../Images/mute.png"
 import volume from "../Images/volume.png"
@@ -30,6 +30,21 @@ const CurrentReminders = () => {
     setSortOption(option); // Update selected option
     setReminders(sortedReminders); // Update reminders with sorted list
   };
+  
+  useEffect(() => { //get all reminders on startup
+    getReminders();
+  },[]);
+
+  const [reminders,setReminders] = useState([]); //used to hold all reminders
+
+  const getReminders = async() => {
+    try{
+      const result = await window.api.getReminders(); //api call to get all reminders to render
+      setReminders(result);
+    } catch (error) {
+      console.error('Failed to get reminders: ', error);
+    }
+  }
 
     return (
         <div className='current-reminder-container'>
@@ -52,7 +67,11 @@ const CurrentReminders = () => {
             ))}
           </div>
         </div>
-      );
+        <div className='reminders-list-container'>
+
+        </div>
+      </div>
+    );
 }
 
 export default CurrentReminders;

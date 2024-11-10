@@ -14,6 +14,9 @@ contextBridge.exposeInMainWorld(
                 }
             }
         },
+        sendNotification: () => {
+            ipcRenderer.send('show-notification', 'Notification Title', 'Notification Body');
+        }, //expose sendNotification to be used everywhere
         send: (channel, data) => {
             let validChannels = ['my-channel'];
             if (validChannels.includes(channel)) {
@@ -25,6 +28,14 @@ contextBridge.exposeInMainWorld(
             if (validChannels.includes(channel)) {
                 ipcRenderer.on(channel, (event, ...args) => func(...args));
             }
+        },
+        addReminder: (reminderName, dueDate) => {
+            return ipcRenderer.invoke('add-reminder', reminderName, dueDate);
+        },
+        removeReminder: (reminderName, dueDate) => {
+            return ipcRenderer.invoke('remove-reminder', reminderName, dueDate);
+        },
+        getReminders: () => {
+            return ipcRenderer.invoke('get-reminders'); //returns results from api call in main.js to CurrentReminders.jsx
         }
-    }
-);
+});
