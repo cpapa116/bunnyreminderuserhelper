@@ -22,10 +22,15 @@ const Header = () => {
         }
     };
 
+    const handleNotification = () => { //method to send a notification to the user
+        window.api.sendNotification(); //api call to preload which renders notification on screen
+    };
+
     return (
         <div className='header-container'>
             <p className='title'>bruh</p>
             <button onClick={openModal} className='chat-button'>Chat</button>
+            <button onClick={handleNotification} className='chat-button'>Notification</button>
 
             {/* Modal */}
             {isModalOpen && (
