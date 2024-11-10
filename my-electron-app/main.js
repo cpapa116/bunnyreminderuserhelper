@@ -3,7 +3,6 @@ const path = require('path');
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const sqlite3 = require('sqlite3').verbose();
-const db = require("./database"); //create database from database.js
 const player = require('play-sound')(); //used to play surprise for notifications
 
 
@@ -87,6 +86,7 @@ ipcMain.handle('remove-reminder', (event, reminderName, dueDate) => {
             }
         });
     });
+});
 
 ipcMain.on('show-notification', (event, title, body) => { //renders notification
     const notification = new Notification({
