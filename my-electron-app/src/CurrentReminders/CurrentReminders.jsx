@@ -1,19 +1,12 @@
 import './CurrentReminders.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import filter from '../Images/filter.png'
 import mute from "../Images/mute.png"
 import volume from "../Images/volume.png"
 import delete_img from "../Images/delete.png"
 
-const CurrentReminders = () => {
+const CurrentReminders = ({ getReminders, reminders }) => {
   const [sortOption, setSortOption] = useState(null);
-  const [reminders, setReminders] = useState([
-    { name: "Doctor Appointment", timestamp: 1684087200000 },
-    { name: "Team Meeting", timestamp: 1684108800000 },
-    { name: "Grocery Shopping", timestamp: 1684195200000 },
-    { name: "Call Mom", timestamp: 1684281600000 },
-    { name: "Project Deadline", timestamp: 1684368000000 },
-  ]);
 
   const formatDate = (epoch) => {
     const date = new Date(epoch);
@@ -30,19 +23,13 @@ const CurrentReminders = () => {
     setSortOption(option); // Update selected option
     setReminders(sortedReminders); // Update reminders with sorted list
   };
-  
-  useEffect(() => { //get all reminders on startup
-    getReminders();
-  },[]);
 
-  const [reminders,setReminders] = useState([]); //used to hold all reminders
-
-  const getReminders = async() => {
+  const handleRemove = async(id) => { //removes reminder by id
     try{
-      const result = await window.api.getReminders(); //api call to get all reminders to render
-      setReminders(result);
+      const result = await window.api.removeReminder(id); //api call to remove a reminder
+      getReminders(); //get reminders again to update state
     } catch (error) {
-      console.error('Failed to get reminders: ', error);
+      console.error("Failed to remove reminder: ", error);
     }
   }
 
@@ -58,17 +45,13 @@ const CurrentReminders = () => {
           <div className='reminders-list-container'>
             {reminders.map((reminder, index) => (
               <div key={index} className='reminder'>
-                <span className='reminder-name'>{reminder.name}</span>
-                <span className='reminder-time'>{formatDate(reminder.timestamp)}</span>
+                <span className='reminder-name'>{reminder.reminderName}</span>
+                <span className='reminder-time'>{formatDate(reminder.dueDate)}</span>
                 <button className='edit-button' >Edit</button>
                 <button className='mute-img'><img src={volume} alt="Mute" /></button>
-                <button className='delete-img'><img src={delete_img} alt="Delete" /></button>
+                <button className='delete-img' onClick={() => handleRemove(reminder.id)}><img src={delete_img} alt="Delete" /></button>
               </div>
             ))}
-          </div>
-        </div>
-        <div className='reminders-list-container'>
-
         </div>
       </div>
     );

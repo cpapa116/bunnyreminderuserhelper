@@ -76,15 +76,15 @@ ipcMain.handle('add-reminder', (event, reminderName, dueDate) => {
     });
 });
 
-//!handler to remove reminders from the database UNTESTED
-ipcMain.handle('remove-reminder', (event, reminderName, dueDate) => {
+//handler to remove reminders from the database
+ipcMain.handle('remove-reminder', (event, id) => {
     return new Promise((resolve,reject) => {
-        const outSql = 'DELETE FROM Reminders WHERE reminderName = ? AND dueDate = ?'; //sql that removes reminder from database
-        db.run(outSql,[reminderName,dueDate],function(err){ //execute sql
+        const outSql = 'DELETE FROM Reminders WHERE id = ?'; //sql that removes reminder from database
+        db.run(outSql,[id],function(err){ //execute sql
             if(err){
                 reject(err);
             } else {
-                resolve({ id: this.lastID, reminderName, dueDate});
+                resolve({ id: this.lastID });
             }
         });
     });

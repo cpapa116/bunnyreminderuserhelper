@@ -1,7 +1,7 @@
 import './AddReminder.css';
 import React, { useState } from 'react';
 
-const AddReminders = () => {
+const AddReminders = ({ getReminders }) => {
     const [reminderName, setReminderName] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
@@ -14,7 +14,7 @@ const AddReminders = () => {
     const handleTimeChange = (e) => {
         setSelectedTime(e.target.value);
     };
-    const handleReminderChange = (e) => {
+    const handleReminderChange = (e) => { //used to update text input box with characters that user is currently typing
       setReminderName(e.target.value);
     };
 
@@ -28,7 +28,7 @@ const AddReminders = () => {
           setReminderName(''); //erase reminder name field
           setSelectedDate(''); //erase date field
           setSelectedTime(''); //erase time field
-          console.log('Reminder Added: ', result);
+          getReminders();
         } catch (err) { //failed to add reminder to database
           console.error('Error adding reminder', err); //!log error for now
           setErrorMessage('Failed to add reminder'); //set error to show failure to add reminder
@@ -77,7 +77,7 @@ const AddReminders = () => {
             </div>
             <div className='column'>
               <p className='column-title'>Add</p>
-              <button className='add-button'>Add</button>
+              <button className='add-button'onClick={handleAddReminder}>Add</button>
             </div>
           </div>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
