@@ -1,61 +1,250 @@
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
 }
 
 .title {
-    font-family: 'ADLaMDisplay', sans-serif;
-    font-size: 40px;
-    color: #8A8A8A;
-    margin-left: 5%;
+  font-family: 'ADLaMDisplay', sans-serif;
+  font-size: 40px;
+  color: #8A8A8A;
+  margin-left: 5%;
 }
 
 .chat-button {
-    padding: 10px 20px;
-    font-size: 16px; 
-    background-color: #8AD1E1;
-    color: #302F2F;
-    border: none;
-    border-radius: 5px; 
-    cursor: pointer; 
-    margin-right: 5%;
-    font-family: 'FiraSans', sans-serif;
+  padding: 10px 20px;
+  font-size: 16px; 
+  background-color: #8AD1E1;
+  color: #302F2F;
+  border: none;
+  border-radius: 5px; 
+  cursor: pointer; 
+  margin-right: 5%;
+  font-family: 'FiraSans', sans-serif;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.chat-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: width 0.6s ease, height 0.6s ease;
 }
 
 .chat-button:hover {
-    background-color: #8A8A8A;
+  background-color: #8A8A8A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(138, 209, 225, 0.4);
+}
+
+.chat-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.chat-button:active {
+  transform: translateY(0);
 }
 
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.modal-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  height: 500px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: modalAppear 0.4s ease-out;
+}
+
+@keyframes modalAppear {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
   }
-  
-  .modal-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    height: 500px;
-    position: relative;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  to {
+      opacity: 1;
+      transform: translateY(0);
   }
-  
-  .header-modal-button {
-    cursor: pointer;
+}
+
+/* Keep your existing styles and update/add these */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  height: 500px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: modalAppear 0.4s ease-out;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+@keyframes modalAppear {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
   }
-  
-  .header-modal-button:hover {
-    background-color: #45a049;
+  to {
+      opacity: 1;
+      transform: translateY(0);
   }
-  
+}
+
+/* Optional: Add a floating animation */
+@keyframes floating {
+  0% {
+      transform: translateY(0px);
+  }
+  50% {
+      transform: translateY(-5px);
+  }
+  100% {
+      transform: translateY(0px);
+  }
+}
+
+.modal-container {
+  animation: modalAppear 0.4s ease-out, floating 4s ease-in-out infinite;
+}
+
+/* Optional: Add a parallax effect to the chat interface */
+.chat-container {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.character-info-card {
+  transform: translateZ(20px);
+  transition: transform 0.3s ease;
+}
+
+.messages-area {
+  transform: translateZ(10px);
+  transition: transform 0.3s ease;
+}
+
+.chat-input-form {
+  transform: translateZ(30px);
+  transition: transform 0.3s ease;
+}
+
+/* Keep existing styles and update/add these */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  height: 500px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: modalAppear 0.4s ease-out;
+  overflow: visible;
+}
+
+/* Faster, more noticeable floating animation */
+.modal-container.floating {
+  animation: 
+      modalAppear 0.4s ease-out,
+      floating 8s ease-in-out infinite;
+}
+
+@keyframes modalAppear {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+@keyframes floating {
+  0% {
+      transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+      transform: translate(1px, -1px) rotate(.2deg);
+  }
+  50% {
+      transform: translate(1.5px, .65px) rotate(-.2deg);
+  }
+  75% {
+      transform: translate(-1px, -1.25px) rotate(.2deg);
+  }
+  100% {
+      transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* Enhanced shadow animation */
+.modal-container.floating {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.modal-container.floating:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Add smooth transition for background blur */
+.modal-overlay {
+  transition: backdrop-filter 0.3s ease;
+}
