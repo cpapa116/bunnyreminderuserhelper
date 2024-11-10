@@ -18,13 +18,7 @@ const Header = () => {
             {isModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal-container">
-                        <ChatInterface />
-                        <button
-                            onClick={closeModal}
-                            className="header-modal-button"
-                        >
-                            X
-                        </button>
+                        <ChatInterface onClose={closeModal} />
                     </div>
                 </div>
             )}
