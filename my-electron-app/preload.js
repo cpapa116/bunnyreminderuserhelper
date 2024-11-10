@@ -37,5 +37,8 @@ contextBridge.exposeInMainWorld(
         },
         getReminders: () => {
             return ipcRenderer.invoke('get-reminders'); //returns results from api call in main.js to CurrentReminders.jsx
+        },
+        editHandler: () => {
+            return ipcRenderer.invoke('editHandler'); //returns results from api call in main.js to CurrentReminders.jsx
         }
 });

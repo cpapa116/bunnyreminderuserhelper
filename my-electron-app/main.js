@@ -105,6 +105,20 @@ ipcMain.handle('get-reminders', (event, reminderName, dueDate) => {
     });
 });
 
+//! UNTESTED handler to edit reminder from the database
+ipcMain.handle('edit-reminder',(event,id,fieldsToEdit) => {
+    return new Promise((resolve,reject) => {
+        const editSql = 'UPDATE FROM Records VALUES(?,?,?)'
+        db.run(editSql, function(error){
+            if(error){
+                reject(error);
+            } else {
+                resolve({id: this.lastID})
+            }
+        });
+    });
+});
+
 ipcMain.on('show-notification', (event, title, body) => { //renders notification
     const notification = new Notification({
         title: title,
