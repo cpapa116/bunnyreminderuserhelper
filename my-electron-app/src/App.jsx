@@ -1,10 +1,15 @@
 import React from 'react';
+import './App.css';
+import Header from './Header/Header.jsx';
+import CurrentReminders from './CurrentReminders/CurrentReminders.jsx';
+import AddReminder from './AddReminder/AddReminder.jsx';
 
 const App = () => {
     return (
-        <div style={{ padding: '20px' }}>
-            <h1>Hello Electron + React!</h1>
-            <p>Welcome to your Electron application with React.</p>
+        <div className="App">
+            <Header />
+            {/* <CurrentReminders />
+            <AddReminder /> */}
         </div>
     );
 };

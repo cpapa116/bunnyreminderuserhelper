@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const { ipcMain } = require('electron');
 
 function createWindow() {
     // Create the browser window.
@@ -14,9 +15,6 @@ function createWindow() {
 
     // Load the index.html file
     mainWindow.loadFile('index.html');
-
-    // Open the DevTools in development mode
-    mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);
@@ -31,4 +29,10 @@ app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
+});
+
+ipcMain.on('my-channel', (event, data) => {
+    console.log('Received from renderer:', data);
+    // Send a response back to the renderer
+    event.reply('my-channel-response', 'Hello from the main process');
 });
