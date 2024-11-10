@@ -1,16 +1,24 @@
 import './Header.css';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import ChatInterface from '../ChatInterface/ChatInterface.jsx';
 
 const Header = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const modalRef = useRef(null);
+    const [isClosing, setIsClosing] = useState(false);
 
-    const openModal = () => setIsModalOpen(true);
+    const openModal = () => {
+        setIsClosing(false);
+        setIsModalOpen(true);
+    };
     
-    const handleOverlayClick = (e) => {
+    const handleClose = (e) => {
         if (e.target.classList.contains('modal-overlay')) {
-            setIsModalOpen(false);
+            setIsClosing(true);
+            // Wait for animation to complete before removing from DOM
+            setTimeout(() => {
+                setIsModalOpen(false);
+                setIsClosing(false);
+            }, 500); // Match this with your animation duration
         }
     };
 
@@ -21,8 +29,8 @@ const Header = () => {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="modal-overlay" onClick={handleOverlayClick}>
-                    <div className="modal-container floating">
+                <div className={`modal-overlay ${isClosing ? 'closing' : ''}`} onClick={handleClose}>
+                    <div className={`modal-container floating ${isClosing ? 'closing' : ''}`}>
                         <ChatInterface />
                     </div>
                 </div>

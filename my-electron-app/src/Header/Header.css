@@ -248,3 +248,103 @@
 .modal-overlay {
   transition: backdrop-filter 0.3s ease;
 }
+
+/* Keep existing styles and update/add these */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  opacity: 1;
+  transition: all 0.5s ease;
+}
+
+.modal-overlay.closing {
+  opacity: 0;
+  backdrop-filter: blur(0px);
+}
+
+.modal-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  height: 500px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: visible;
+}
+
+/* Opening Animation */
+.modal-container.floating {
+  animation: 
+      modalAppear 0.4s ease-out,
+      floating 8s ease-in-out infinite;
+}
+
+/* Closing Animation */
+.modal-container.floating.closing {
+  animation: modalClose 0.5s ease-in forwards;
+}
+
+@keyframes modalAppear {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+@keyframes modalClose {
+  0% {
+      opacity: 1;
+      transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+      opacity: 0;
+      transform: translate(0, 40px) rotate(5deg) scale(0.95);
+  }
+}
+
+@keyframes floating {
+  0% {
+      transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+      transform: translate(1px, -1px) rotate(.2deg);
+  }
+  50% {
+      transform: translate(1.5px, .65px) rotate(-.2deg);
+  }
+  75% {
+      transform: translate(-1px, -1.25px) rotate(.2deg);
+  }
+  100% {
+      transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* Enhanced shadow animation */
+.modal-container.floating {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.modal-container.floating:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-container.floating.closing {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
