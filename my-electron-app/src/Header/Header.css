@@ -1,5 +1,29 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
 .title {
     font-family: 'ADLaMDisplay', sans-serif;
     font-size: 40px;
     color: #8A8A8A;
+    margin-left: 5%;
+}
+
+.chat-button {
+    padding: 10px 20px;
+    font-size: 16px; 
+    background-color: #8AD1E1;
+    color: #302F2F;
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer; 
+    margin-right: 5%;
+    font-family: 'FiraSans', sans-serif;
+}
+
+.chat-button:hover {
+    background-color: #8A8A8A;
 }
