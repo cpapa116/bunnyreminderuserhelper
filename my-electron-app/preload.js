@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { sendNotification } = require('./src/Notifications');
 
 // Replace with your actual API key
 const API_KEY = '';
@@ -20,5 +21,12 @@ contextBridge.exposeInMainWorld(
                 }
             }
         }
+    }
+);
+
+contextBridge.exposeInMainWorld(
+    'electron', {
+        sendNotification: () => { sendNotification(); }
+        //onNotificationReceived: (callback) => ipcRenderer.on('notification-reply', callback)
     }
 );

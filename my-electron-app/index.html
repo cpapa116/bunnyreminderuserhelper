@@ -9,12 +9,6 @@
     <div id="root"></div>
     <button id="notifyBtn">Show Notification</button>
     <script src="./dist/bundle.js"></script>
-    <script>
-        const { sendNotification } = require('./src/Notifications');
-        // Listen for button click to send notification
-        document.getElementById('notifyBtn').addEventListener('click', () => {
-            sendNotification();
-        });
-    </script>
+    <script src="./src/notif.js"></script>
 </body>
 </html>
