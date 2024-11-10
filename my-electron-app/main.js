@@ -7,9 +7,11 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
+const db = require("./database");
+
 function createWindow() {
     const mainWindow = new BrowserWindow({
-        width: 1200,
+        width: 600,
         height: 800,
         webPreferences: {
             nodeIntegration: false,
