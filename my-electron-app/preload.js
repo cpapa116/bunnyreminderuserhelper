@@ -30,9 +30,12 @@ contextBridge.exposeInMainWorld(
             }
         },
         addReminder: (reminderName, dueDate) => {
-            ipcRenderer.invoke('add-reminder', reminderName, dueDate)
+            return ipcRenderer.invoke('add-reminder', reminderName, dueDate);
         },
         removeReminder: (reminderName, dueDate) => {
-            ipcRenderer.invoke('remove-reminder', reminderName, dueDate)
+            return ipcRenderer.invoke('remove-reminder', reminderName, dueDate);
+        },
+        getReminders: () => {
+            return ipcRenderer.invoke('get-reminders'); //returns results from api call in main.js to CurrentReminders.jsx
         }
 });

@@ -62,10 +62,11 @@ ipcMain.handle('gemini-generate', async (event, prompt) => {
     }
 });
 
+//handler to add reminders to the database
 ipcMain.handle('add-reminder', (event, reminderName, dueDate) => {
     return new Promise((resolve,reject) => {
-        const inSql = 'INSERT INTO Reminders (reminderName, dueDate) VALUES (?,?)';
-        db.run(inSql,[reminderName,dueDate],function(err){
+        const inSql = 'INSERT INTO Reminders (reminderName, dueDate) VALUES (?,?)'; //sql that inserts new reminder into database
+        db.run(inSql,[reminderName,dueDate],function(err){ //execute sql
             if(err){
                 reject(err)
             } else {
@@ -75,14 +76,29 @@ ipcMain.handle('add-reminder', (event, reminderName, dueDate) => {
     });
 });
 
+//!handler to remove reminders from the database UNTESTED
 ipcMain.handle('remove-reminder', (event, reminderName, dueDate) => {
-    return newPromise((resolve,reject) => {
-        const outSql = 'DELETE FROM Reminders (reminderName, dueDate) VALUES (?,?)';
-        db.run(outSql,[reminderName,dueDate],function(err){
+    return new Promise((resolve,reject) => {
+        const outSql = 'DELETE FROM Reminders WHERE reminderName = ? AND dueDate = ?'; //sql that removes reminder from database
+        db.run(outSql,[reminderName,dueDate],function(err){ //execute sql
             if(err){
                 reject(err);
             } else {
                 resolve({ id: this.lastID, reminderName, dueDate});
+            }
+        });
+    });
+});
+
+//handler to get all reminders from the database
+ipcMain.handle('get-reminders', (event, reminderName, dueDate) => {
+    return new Promise((resolve,reject) => {
+        const getSql = 'SELECT * FROM Reminders'; //sql that gets all reminders from database
+        db.all(getSql, (err,rows) => { //execute sql
+            if(err){
+                reject(err);
+            } else {
+                resolve(rows);
             }
         });
     });
