@@ -28,7 +28,7 @@
   }
   
   .column {
-    width: 22%;
+    width: 25%;
   }
   
   .column-title {
@@ -48,7 +48,7 @@
   .add-button {
     padding: 10px 20px;
     background-color: #8AD1E1;
-    color: white;
+    color: #302F2F;
     border: none;
     border-radius: 4px;
     cursor: pointer;

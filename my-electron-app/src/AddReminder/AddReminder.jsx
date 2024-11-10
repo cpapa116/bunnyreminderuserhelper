@@ -1,6 +1,6 @@
 import './AddReminder.css';
 import React, { useState } from 'react';
-import { addReminder, getReminders } from '../../database';
+// import { addReminder, getReminders } from '../../database';
 
 const AddReminders = () => {
     const [reminderName, setReminderName] = useState('');
@@ -16,29 +16,29 @@ const AddReminders = () => {
         setSelectedTime(e.target.value);
     };
 
-    const handleAddReminder = () => {
-      if (!reminderName || !selectedDate || !selectedTime) {
-          setErrorMessage('Please fill in all fields.');
-          return;
-      }
+    // const handleAddReminder = () => {
+    //   if (!reminderName || !selectedDate || !selectedTime) {
+    //       setErrorMessage('Please fill in all fields.');
+    //       return;
+    //   }
 
-      const fullDate = `${selectedDate}T${selectedTime}`;
-      const dueDate = new Date(fullDate).getTime();
+    //   const fullDate = `${selectedDate}T${selectedTime}`;
+    //   const dueDate = new Date(fullDate).getTime();
 
-      // Call the addReminder function from database.js
-      addReminder(reminderName, dueDate, (err, result) => {
-          if (err) {
-              console.error('Error adding reminder:', err);
-              setErrorMessage('Failed to add reminder.');
-          } else {
-              console.log('Reminder added:', result);
-              setErrorMessage('');
-              setReminderName('');
-              setSelectedDate('');
-              setSelectedTime('');
-          }
-      });
-    }
+    //   // Call the addReminder function from database.js
+    //   addReminder(reminderName, dueDate, (err, result) => {
+    //       if (err) {
+    //           console.error('Error adding reminder:', err);
+    //           setErrorMessage('Failed to add reminder.');
+    //       } else {
+    //           console.log('Reminder added:', result);
+    //           setErrorMessage('');
+    //           setReminderName('');
+    //           setSelectedDate('');
+    //           setSelectedTime('');
+    //       }
+    //   });
+    // }
 
     return (
         <div className='add-reminder-container'>
@@ -72,7 +72,7 @@ const AddReminders = () => {
             </div>
             <div className='column'>
               <p className='column-title'>Add</p>
-              <button className='add-button' onClick={handleAddReminder}>Add</button>
+              <button className='add-button'>Add</button>
             </div>
           </div>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
