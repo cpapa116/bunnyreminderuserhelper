@@ -7,13 +7,7 @@ import delete_img from "../Images/delete.png"
 
 const CurrentReminders = () => {
   const [sortOption, setSortOption] = useState(null);
-  const [reminders, setReminders] = useState([
-    { name: "Doctor Appointment", timestamp: 1684087200000 },
-    { name: "Team Meeting", timestamp: 1684108800000 },
-    { name: "Grocery Shopping", timestamp: 1684195200000 },
-    { name: "Call Mom", timestamp: 1684281600000 },
-    { name: "Project Deadline", timestamp: 1684368000000 },
-  ]);
+  const [reminders, setReminders] = useState([]); //used to hold all reminders
 
   const formatDate = (epoch) => {
     const date = new Date(epoch);
@@ -34,8 +28,6 @@ const CurrentReminders = () => {
   useEffect(() => { //get all reminders on startup
     getReminders();
   },[]);
-
-  const [reminders,setReminders] = useState([]); //used to hold all reminders
 
   const getReminders = async() => {
     try{
@@ -58,17 +50,13 @@ const CurrentReminders = () => {
           <div className='reminders-list-container'>
             {reminders.map((reminder, index) => (
               <div key={index} className='reminder'>
-                <span className='reminder-name'>{reminder.name}</span>
-                <span className='reminder-time'>{formatDate(reminder.timestamp)}</span>
+                <span className='reminder-name'>{reminder.reminderName}</span>
+                <span className='reminder-time'>{formatDate(reminder.dueDate)}</span>
                 <button className='edit-button' >Edit</button>
                 <button className='mute-img'><img src={volume} alt="Mute" /></button>
                 <button className='delete-img'><img src={delete_img} alt="Delete" /></button>
               </div>
             ))}
-          </div>
-        </div>
-        <div className='reminders-list-container'>
-
         </div>
       </div>
     );
